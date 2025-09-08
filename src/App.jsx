@@ -1,8 +1,12 @@
-import './index.css'
+import Body from './Components/Body'
+import Header from './Components/Header'
+
 function App() {
 
   return (
-      <h1 className='font-bold text'>Hello Brothaa</h1>
-  )
+      <div>
+        <Body />
+      </div>
+  );
 }
 export default App
