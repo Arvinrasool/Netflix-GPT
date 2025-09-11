@@ -1,9 +1,17 @@
 import Header from './Header'
 import {Link} from 'react-router-dom' 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { ValidateSignIn } from '../Utils/validateSignIn';
 const Login = () => {
 
     const [isSignIn, setIsSignIn] = useState(true);
+
+    const email = useRef(null);
+    const password = useRef(null);
+
+    const handleValidation = () =>{
+        ValidateSignIn(email.current.value, password.current.value);
+    }
 
     const toggleIsSignIn = ()=> {
         setIsSignIn(!isSignIn);
@@ -20,17 +28,19 @@ const Login = () => {
                 <div className="absolute top-0 left-0 w-full">
                     <Header />
                 </div>
-                    <form className='flex flex-col gap-4 bg-black/70 p-16 absolute top-6/12 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[32%] mt-8'>
+                    <form onSubmit={(e) => e.preventDefault()} className='flex flex-col gap-4 bg-black/70 p-16 absolute top-6/12 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[32%] mt-8'>
                         <h1 className='text-3xl text-white font-bold mb-4'>{isSignIn? ' Sign In' : 'Sign Up'}</h1>
                         {
                             !isSignIn?
                             <input type="text" placeholder='Full Name' className='p-3 border-1 border-amber-50 text-amber-50 font-semibold' /> :''
                             }
-                        <input type="text" placeholder='Email Address' className='p-3 border-1 border-amber-50 text-amber-50 font-semibold' />
-                        <input type="password" placeholder='Password' className='p-3 border-1 border-amber-50  text-amber-50 font-semibold' />
-                        <button className='p-2 text-white bg-red-500 cursor-pointer'>Sign In</button>
-                        <h1 className='text-white flex justify-center'>OR</h1>
-                        <button className='text-white bg-gray-600 px-[25%] p-2 cursor-pointer' >Use a sign-in code</button>
+                        <input ref={email} type="text" placeholder='Email Address' className='p-3 border-1 border-amber-50 text-amber-50 font-semibold' />
+                        <input ref={password} type="password" placeholder='Password' className='p-3 border-1 border-amber-50  text-amber-50 font-semibold' />
+                        <button className='p-2 text-white bg-red-500 cursor-pointer' onClick={handleValidation}>{isSignIn? ' Sign In' : 'Sign Up'}</button>
+                        <h1 className='text-white flex justify-center'>{isSignIn? 'OR' :''}</h1>
+                        {
+                            isSignIn?
+                            <button className='text-white bg-gray-600 px-[25%] p-2 cursor-pointer' >Use a sign-in code</button> :''}
                         <p className='text-white underline cursor-pointer'>Forgot Password ?</p>
                         <div>
                             <input type="checkbox" name="Remember me" id="" className='text-white mr-3' />
@@ -54,8 +64,8 @@ const Login = () => {
                     <div className='grid grid-cols-4 gap-8'>
                         <Link className='underline'>FAQ</Link>
                         <Link className='underline'>Help Centre</Link>
-                        <Link className='underline'>Terms of Use</Link>
                         <Link className='underline'>Privacy</Link>
+                        <Link className='underline'>Terms of Use</Link>
                         <Link className='underline'>Cookie Preferences</Link>
                         <Link className='underline'>Corporate Information</Link>
                     </div>
