@@ -5,12 +5,14 @@ import { ValidateSignIn } from '../Utils/validateSignIn';
 const Login = () => {
 
     const [isSignIn, setIsSignIn] = useState(true);
+    const [errorMessage, setErrorMessage] = useState(null);   
 
     const email = useRef(null);
     const password = useRef(null);
 
     const handleValidation = () =>{
-        ValidateSignIn(email.current.value, password.current.value);
+        const message = ValidateSignIn(email.current.value, password.current.value);
+        setErrorMessage(message);
     }
 
     const toggleIsSignIn = ()=> {
@@ -36,6 +38,7 @@ const Login = () => {
                             }
                         <input ref={email} type="text" placeholder='Email Address' className='p-3 border-1 border-amber-50 text-amber-50 font-semibold' />
                         <input ref={password} type="password" placeholder='Password' className='p-3 border-1 border-amber-50  text-amber-50 font-semibold' />
+                        <p className='text-red-500 font-medium'>{errorMessage}</p>
                         <button className='p-2 text-white bg-red-500 cursor-pointer' onClick={handleValidation}>{isSignIn? ' Sign In' : 'Sign Up'}</button>
                         <h1 className='text-white flex justify-center'>{isSignIn? 'OR' :''}</h1>
                         {
