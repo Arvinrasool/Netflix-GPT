@@ -2,6 +2,8 @@ import Header from './Header'
 import {Link} from 'react-router-dom' 
 import { useRef, useState } from 'react'
 import { ValidateSignIn } from '../Utils/validateSignIn';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../Utils/firebase';
 const Login = () => {
 
     const [isSignIn, setIsSignIn] = useState(true);
@@ -13,6 +15,33 @@ const Login = () => {
     const handleValidation = () =>{
         const message = ValidateSignIn(email.current.value, password.current.value);
         setErrorMessage(message);
+        if(message) return;
+
+        if(!isSignIn){
+            createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+            .then((userCredential) => {
+            const user = userCredential.user;
+            console.log(user)
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                setErrorMessage(errorCode +'-'+errorMessage);
+            });
+        }
+        else{
+            signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log(user);
+                    
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                setErrorMessage(errorCode +'-'+errorMessage);
+            });
+        }
     }
 
     const toggleIsSignIn = ()=> {
@@ -26,7 +55,6 @@ const Login = () => {
                  src="https://assets.nflxext.com/ffe/siteui/vlv3/8d617e19-3c3c-4c28-8998-c9b14dbc7200/web/IN-en-20250901-TRIFECTA-perspective_48d84d4e-9558-46b8-a0f3-8b2dc8478431_large.jpg"
                 alt="Background" />
                 <div className="absolute top-0 left-0 w-full h-full bg-black opacity-60"></div>
-                {/* Content */}
                 <div className="absolute top-0 left-0 w-full">
                     <Header />
                 </div>
